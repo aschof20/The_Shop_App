@@ -1,13 +1,15 @@
 import React from 'react';
-import { FlatList, View, Text, StyleSheet, Platform } from 'react-native';
+import { FlatList, Button, StyleSheet, Platform } from 'react-native';
 import ProductItem from '../../components/shop/ProductItem';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../../components/UI/HeaderButton';
-
+import Colors from '../../constants/Colors';
+import * as productsActions from '../../store/actions/products';
 
 const UserProductsScreen = props => {
     const userProducts = useSelector(state => state.products.userProducts);
+    const dispatch = useDispatch();
     return (
         <FlatList
             data={userProducts}
@@ -16,9 +18,19 @@ const UserProductsScreen = props => {
                 image={itemData.item.imageUrl}
                 title={itemData.item.title}
                 price={itemData.item.price}
-                onViewDetail={() => { }}
-                onAddToCart={() => { }}
-            />}
+                onSelect={() => { }}
+
+
+            >
+                <Button color={Colors.primary} title="Edit" onPress={() => {
+
+                }} />
+                <Button color={Colors.primary} title="Delete" onPress={() => {
+                    dispatch(productsActions.deleteProduct(itemData.item.id));
+                }} />
+
+
+            </ProductItem>}
         />
     );
 };
@@ -29,6 +41,7 @@ UserProductsScreen.navigationOptions = navData => {
     return {
         headerTitle: "Your Products",
         headerLeft:
+
             <HeaderButtons HeaderButtonComponent={HeaderButton} >
                 <Item title="Menu" iconName={Platform.OS === 'android' ? 'md-menu' : 'ios-menu'} onPress={() => {
                     navData.navigation.toggleDrawer();
