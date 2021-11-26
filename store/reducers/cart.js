@@ -64,7 +64,7 @@ export default (state = initialState, action) => {
 
         case DELETE_PRODUCT:
             const updatedItems = { ...state.items };
-
+            console.log('hello');
             const itemTotal = state.items[action.pid].sum;
             delete updatedItems[action.pid];
             return {
