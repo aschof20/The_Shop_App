@@ -71,7 +71,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 items: updatedItems,
-                totalAmount: state.totalAmount - itemTotal
+                totalAmount: state.totalAmount - itemTotal,
             };
         default:
             return state;
