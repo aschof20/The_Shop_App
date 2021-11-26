@@ -1,11 +1,11 @@
-import { ADD_TO_CART, REMOVE_FROM_CART } from "../actions/cart";
-import CartItem from "../../models/cart-item";
-import { ADD_ORDER } from "../actions/orders";
-import { DELETE_PRODUCT } from "../actions/products";
+import { ADD_TO_CART, REMOVE_FROM_CART } from '../actions/cart';
+import CartItem from '../../models/cart-item';
+import { ADD_ORDER } from '../actions/orders';
+import { DELETE_PRODUCT } from '../actions/products';
 
 const initialState = {
     items: {},
-    totalAmount: 0
+    totalAmount: 0,
 };
 
 export default (state = initialState, action) => {
@@ -23,16 +23,16 @@ export default (state = initialState, action) => {
                     state.items[addedProduct.id].quantity + 1,
                     prodPrice,
                     prodTitle,
-                    state.items[addedProduct.id].sum + prodPrice
+                    state.items[addedProduct.id].sum + prodPrice,
                 );
-
-            } else {// Ading new item to cart
+            } else {
+                // Ading new item to cart
                 updatedOrNewCartItem = new CartItem(1, prodPrice, prodTitle, prodPrice);
-
-            } return {
+            }
+            return {
                 ...state,
                 items: { ...state.items, [addedProduct.id]: updatedOrNewCartItem },
-                totalAmount: state.totalAmount + prodPrice
+                totalAmount: state.totalAmount + prodPrice,
             };
         case REMOVE_FROM_CART:
             const selectedCartItem = state.items[action.pid];
@@ -45,7 +45,8 @@ export default (state = initialState, action) => {
                     selectedCartItem.quantity - 1,
                     selectedCartItem.prodPrice,
                     selectedCartItem.productTitle,
-                    selectedCartItem.sum - selectedCartItem.productPrice);
+                    selectedCartItem.sum - selectedCartItem.productPrice,
+                );
                 updatedCartItems = { ...state.items, [action.pid]: updatedCartItem };
             } else {
                 // Single item in care - need to erase item form cart
@@ -55,15 +56,13 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 items: updatedCartItems,
-                totalAmount: state.totalAmount - selectedCartItem.productPrice
+                totalAmount: state.totalAmount - selectedCartItem.productPrice,
             };
 
         case ADD_ORDER:
             return initialState;
 
         case DELETE_PRODUCT:
-
-
             const updatedItems = { ...state.items };
 
             const itemTotal = state.items[action.pid].sum;
@@ -75,7 +74,5 @@ export default (state = initialState, action) => {
             };
         default:
             return state;
-
     }
-
 };
