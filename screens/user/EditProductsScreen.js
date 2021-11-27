@@ -1,8 +1,7 @@
 import React, { useEffect, useCallback, useReducer } from 'react';
 import {
     View,
-    Text,
-    TextInput,
+    KeyboardAvoidingView,
     ScrollView,
     StyleSheet,
     Platform,
@@ -86,7 +85,8 @@ const EditProductsScreen = (props) => {
                     formState.inputValues.title,
                     formState.inputValues.description,
                     formState.inputValues.imageUrl,
-                    +formState.inputValues.price),
+                    +formState.inputValues.price,
+                ),
             );
         }
         props.navigation.goBack();
@@ -97,77 +97,79 @@ const EditProductsScreen = (props) => {
     }, [submitHandler]);
 
     // Function to validate user Title input
-    const inputChangeHandler = useCallback((inputIdentifier, inputValue, inputValidity) => {
-
-        dispatchFormState({
-            type: FORM_INPUT_UPDATE,
-            value: inputValue,
-            isValid: inputValidity,
-            input: inputIdentifier,
-        });
-    }, [dispatchFormState]);
+    const inputChangeHandler = useCallback(
+        (inputIdentifier, inputValue, inputValidity) => {
+            dispatchFormState({
+                type: FORM_INPUT_UPDATE,
+                value: inputValue,
+                isValid: inputValidity,
+                input: inputIdentifier,
+            });
+        },
+        [dispatchFormState],
+    );
 
     return (
-        <ScrollView>
-            <View style={styles.form}>
-                <Input
-                    id='title'
-                    label='Title'
-                    errorText='Please enter a valid title!'
-                    keyboardType='default'
-                    autoCapitalize='sentences'
-                    autoCorrect
-                    returnKeyType='next'
-                    onInputChange={inputChangeHandler}
-                    initialValue={editedProduct ? editedProduct.title : ''}
-                    initiallyValid={!!editedProduct}
-                    required
-                />
-
-                <Input
-                    id='imageUrl'
-                    label='Image Url'
-                    errorText='Please enter a valid image url!'
-                    keyboardType='default'
-                    returnKeyType='next'
-                    onInputChange={inputChangeHandler}
-                    initialValue={editedProduct ? editedProduct.imageUrl : ''}
-                    initiallyValid={!!editedProduct}
-                    required
-                />
-
-                {editedProduct ? null : (
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior='padding' keyboardVerticalOffset={100} >
+            <ScrollView>
+                <View style={styles.form}>
                     <Input
-                        id='price'
-                        label='Price'
-                        errorText='Please enter a valid price!'
-                        keyboardType='decimal-pad'
-                        returnKeyType='next'
-                        required
-                        min={0.1}
+                        id="title"
+                        label="Title"
+                        errorText="Please enter a valid title!"
+                        keyboardType="default"
+                        autoCapitalize="sentences"
+                        autoCorrect
+                        returnKeyType="next"
                         onInputChange={inputChangeHandler}
+                        initialValue={editedProduct ? editedProduct.title : ''}
+                        initiallyValid={!!editedProduct}
+                        required
                     />
 
-                )}
+                    <Input
+                        id="imageUrl"
+                        label="Image Url"
+                        errorText="Please enter a valid image url!"
+                        keyboardType="default"
+                        returnKeyType="next"
+                        onInputChange={inputChangeHandler}
+                        initialValue={editedProduct ? editedProduct.imageUrl : ''}
+                        initiallyValid={!!editedProduct}
+                        required
+                    />
 
-                <Input
-                    id='description'
-                    label='Description'
-                    errorText='Please enter a valid description!'
-                    keyboardType='default'
-                    autoCapitalize='sentences'
-                    autoCorrect
-                    onInputChange={inputChangeHandler}
-                    multiline
-                    numberOfLines={3}
-                    initialValue={editedProduct ? editedProduct.description : ''}
-                    initiallyValid={!!editedProduct}
-                    required
-                    minLength={5}
-                />
+                    {editedProduct ? null : (
+                        <Input
+                            id="price"
+                            label="Price"
+                            errorText="Please enter a valid price!"
+                            keyboardType="decimal-pad"
+                            returnKeyType="next"
+                            required
+                            min={0.1}
+                            onInputChange={inputChangeHandler}
+                        />
+                    )}
 
-            </View>
-        </ScrollView>
+                    <Input
+                        id="description"
+                        label="Description"
+                        errorText="Please enter a valid description!"
+                        keyboardType="default"
+                        autoCapitalize="sentences"
+                        autoCorrect
+                        onInputChange={inputChangeHandler}
+                        multiline
+                        numberOfLines={3}
+                        initialValue={editedProduct ? editedProduct.description : ''}
+                        initiallyValid={!!editedProduct}
+                        required
+                        minLength={5}
+                    />
+                </View>
+            </ScrollView>
+        </KeyboardAvoidingView>
     );
 };
 
@@ -195,7 +197,6 @@ const styles = StyleSheet.create({
     form: {
         margin: 20,
     },
-
 });
 
 export default EditProductsScreen;

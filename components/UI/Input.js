@@ -13,39 +13,36 @@ const inputReducer = (state, action) => {
             return {
                 ...state,
                 value: action.value,
-                isValid: action.isValid
+                isValid: action.isValid,
             };
         case INPUT_BLUR:
             return {
                 ...state,
-                touched: true
+                touched: true,
             };
         default:
             return state;
     }
 };
 
-
-
-const Input = props => {
-
+const Input = (props) => {
     const [inputState, dispatch] = useReducer(inputReducer, {
         value: props.initialValue ? props.initialValue : '',
         isValid: props.initiallyValid,
-        touched: false
+        touched: false,
     });
 
     const { onInputChange, id } = props;
 
     useEffect(() => {
-
         if (inputState.touched) {
             props.onInputChange(id, inputState.value, inputState.isValid);
         }
     }, [id, inputState, onInputChange]);
 
-    const textChangeHandler = text => {
-        const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const textChangeHandler = (text) => {
+        const emailRegex =
+            /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         let isValid = true;
         if (props.required && text.trim().length === 0) {
             isValid = false;
@@ -80,11 +77,13 @@ const Input = props => {
                 onChangeText={textChangeHandler}
                 onBlur={lostFocusHandler}
             />
-            {!inputState.isValid && (
-                <Text style={{ color: 'red' }}>
-                    <Ionicons name={'alert-circle-outline'} size={23} color="red" />
-                    {props.errorText}
-                </Text>
+            {!inputState.isValid && inputState.touched && (
+                <View style={styles.errorContainer}>
+                    <Text style={styles.errorText}>
+                        <Ionicons name={'alert-circle-outline'} size={23} color="red" />
+                        {props.errorText}
+                    </Text>
+                </View>
             )}
         </View>
     );
@@ -103,6 +102,14 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         borderBottomColor: '#ccc',
         borderBottomWidth: 1,
+    },
+    errorContainer: {
+        marginVertical: 5
+    },
+    errorText: {
+        color: 'red',
+        fontFamily: 'open-sans',
+        fontSize: 14
     },
 });
 
