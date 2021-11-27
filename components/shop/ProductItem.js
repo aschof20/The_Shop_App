@@ -10,8 +10,6 @@ const ProductItem = props => {
         TouchableCmp = TouchableNativeFeedback;
     }
 
-
-    console.log(props.price);
     return (
         <Card style={styles.product}>
             <View style={styles.touchable}>
